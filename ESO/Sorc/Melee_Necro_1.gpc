@@ -7,7 +7,6 @@
 
 int LightWeaveTime = 70;
 int DefaultTime = 100;
-int CrystalFragTime = 900;
 
 define Button_One = 19;  //Xbox One: A  ||  PS4: Cross   //
 define Button_Two = 20;  //Xbox One: X  ||  PS4: Square  //
@@ -34,145 +33,117 @@ define RightStick_Y = 10;//Right stick up(-100) and down(+100)
 //Booleans
 int ReadyForInput = TRUE;
 int RunProgram = FALSE;
+int RunFinisher = FALSE;
 
 //Variables
 int MSElapsed = 0;
 
-int MSCritSurgeTime = 32;
-int MSDaedricSummon = 12;
-int MSLightningFlood = 10;
-int MSElementalBlockaid = 14;
+int SBlightedBones = 14;
+int SDetSiphon = 12;
+int SEH_SA = 14;
+int SWreckingBlow = 3;
 int MSPotion = 46;
 
-int CritSurgeTimer = 32;
-int DaedricSummonTimer = 12;
-int LightningFloodTimer = 9;
-int ElementalBlockaidTimer = 14;
+int BlightedBonesTimer = 14;
+int DetSiphonTimer = 12;
+int EH_SATimer = 14;
+int WreckingBlowTimer = 3;
 int PotionTimer = 35;
 
 
 main {
     vm_tctrl(-5); //This should run every 5 MS now
     
-    if (event_press(D_Right))
+    if (get_ptime(Left_Stick_Click) >= 1000 && get_val(Left_Stick_Click) == 100 && event_press(D_Right))
     {
         RunProgram = !RunProgram;
+    }
+    
+    if (get_ptime(Left_Stick_Click) >= 1000 && get_val(Left_Stick_Click) == 100 && event_press(D_Up))
+    {
+        RunFinisher = !RunFinisher;
     }
     
     //Initiate the real time timer
     MSElapsed = MSElapsed + get_rtime();
     if(MSElapsed >= 1000){
         MSElapsed = 0;
-        CritSurgeTimer = CritSurgeTimer + 1;   
-        DaedricSummonTimer = DaedricSummonTimer + 1;
-        LightningFloodTimer = LightningFloodTimer + 1;
-        ElementalBlockaidTimer = ElementalBlockaidTimer + 1;
+        BlightedBonesTimer = BlightedBonesTimer + 1;           
+        DetSiphonTimer = DetSiphonTimer + 1;
+        EH_SATimer = EH_SATimer + 1;
         PotionTimer = PotionTimer + 1;
+        WreckingBlowTimer = WreckingBlowTimer + 1;
         if(RunProgram){
-            if(CritSurgeTimer >= MSCritSurgeTime && ReadyForInput){
+            if(BlightedBonesTimer >= SBlightedBones && ReadyForInput){
                 ReadyForInput = FALSE;
-                combo_run(CritSurge);
+                combo_run(BlightedBones);
                 }       
-            if(DaedricSummonTimer >= MSDaedricSummon && ReadyForInput){
+            if(DetSiphonTimer >= SDetSiphon && ReadyForInput){
                 ReadyForInput = FALSE;
-                combo_run(DaedricSummon);
+                combo_run(DetSiphon);
             }
-            if (LightningFloodTimer >= MSLightningFlood && ReadyForInput){
-                ReadyForInput = FALSE;
-                if(ElementalBlockaidTimer >= MSElementalBlockaid -3){
-                    combo_run(LF_MO_EB);
-                } else {
-                    combo_run(LF_MO);
-                }
-            }
-            if (ElementalBlockaidTimer >= MSElementalBlockaid && ReadyForInput){
-                ReadyForInput = FALSE;
-                combo_run(ElementalBlockaid);
+            if (EH_SATimer >= SEH_SA && ReadyForInput){
+                ReadyForInput = FALSE;                
+                combo_run(EH_SA);
             }
             if(PotionTimer >= MSPotion && ReadyForInput)
             {
                 combo_run(Potion);
             }
             
-            if(ReadyForInput)
+            if(ReadyForInput && !RunFinisher)
             {
                 ReadyForInput = FALSE;
-                combo_run(CrystalFrags);
+                combo_run(WreckingBlow);
+            }
+            
+            if(ReadyForInput && RunFinisher)
+            {
+                if (WreckingBlowTimer >= SWreckingBlow && ReadyForInput)
+                {
+                    ReadyForInput = FALSE;
+                    combo_run(WreckingBlow);
+                }
+                
+                ReadyForInput = FALSE;
+                combo_run(RevSlice);
             }
         }
     }
 }
 
-combo CritSurge {
-    set_val(Right_Trigger, 100);    wait(100);
-    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Button_Four, 100);    wait(100);
-    set_val(Button_Four, 0);      wait(DefaultTime);
-    CritSurgeTimer = 0;
-    ReadyForInput = TRUE;
-}
-
-combo DaedricSummon {
+combo BlightedBones {
     set_val(Right_Trigger, 100);    wait(100);
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
     set_val(Button_Three, 100);    wait(100);
     set_val(Button_Three, 0);      wait(DefaultTime);
-    DaedricSummonTimer = 0;
+    BlightedBonesTimer = 0;
     ReadyForInput = TRUE;
 }
 
-combo LF_MO {
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
-    //Lightning Flood
-    //set_val(Right_Trigger, 100);    wait(100);
-    //set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    //set_val(Button_Three, 100);    wait(100);
-    //set_val(Button_Three, 0);      wait(300);  
-    //Mystic Orb  
+combo DetSiphon {
     set_val(Right_Trigger, 100);    wait(100);
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
     set_val(Left_Bumper, 100);    wait(100);
-    set_val(Left_Bumper, 0);      wait(500);
-    LightningFloodTimer = 0; 
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val(Left_Bumper, 0);      wait(DefaultTime);
+    DetSiphonTimer = 0;
     ReadyForInput = TRUE;
 }
 
-combo LF_MO_EB {
+combo EH_SA {
     set_val (D_Left, 100); wait(100);
     set_val (D_Left, 0); wait(300);
-    //Lightning Flood
-    //set_val(Right_Trigger, 100);    wait(100);
-    //set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    //set_val(Button_Three, 100);    wait(100);
-    //set_val(Button_Three, 0);      wait(300);  
-    //Mystic Orb  
+    //Skeletal Archer
     set_val(Right_Trigger, 100);    wait(100);
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Left_Bumper, 100);    wait(100);
-    set_val(Left_Bumper, 0);      wait(800);
-    LightningFloodTimer = 0;  
-    //ElementalBlockaid
+    set_val(Button_Two, 100);    wait(100);
+    set_val(Button_Two, 0);      wait(DefaultTime);
+    //Endless Hail
     set_val(Right_Trigger, 100);    wait(100);
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Button_Four, 100);    wait(100);
-    set_val(Button_Four, 0);      wait(300);
-    ElementalBlockaidTimer = 0;
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
-    ReadyForInput = TRUE;
-}
-
-combo ElementalBlockaid {
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
-    set_val(Right_Trigger, 100);    wait(100);
-    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Button_Four, 100);    wait(100);
-    set_val(Button_Four, 0);      wait(300);
-    ElementalBlockaidTimer = 0;
+    set_val(Button_Two, 100);    wait(100);
+    set_val(Button_Two, 0);      wait(DefaultTime);
+    EH_SATimer = 0; 
     set_val (D_Left, 100); wait(100);
     set_val (D_Left, 0); wait(300);
     ReadyForInput = TRUE;
@@ -183,12 +154,24 @@ combo Potion {
     set_val(D_Up, 0);      wait(20);
 }
 
-combo CrystalFrags {
+combo WreckingBlow {
+    set_val(Right_Bumper,100);  set_val(Left_Bumper,100);     wait(40); 
+    set_val(Right_Bumper, 0);   set_val(Left_Bumper, 0);       wait(150);  // ultimate
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Four, 100);    wait(100);
+    set_val(Button_Four, 0);      wait(DefaultTime);
+    WreckingBlowTimer = 0;
+    ReadyForInput = TRUE;
+}
+
+combo RevSlice {
     set_val(Right_Bumper,100);  set_val(Left_Bumper,100);     wait(40); 
     set_val(Right_Bumper, 0);   set_val(Left_Bumper, 0);       wait(150);  // ultimate
     set_val(Right_Trigger, 100);    wait(100);
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
     set_val(Button_Two, 100);    wait(100);
-    set_val(Button_Two, 0);      wait(CrystalFragTime);
+    set_val(Button_Two, 0);      wait(DefaultTime);
+    WreckingBlowTimer = 0;
     ReadyForInput = TRUE;
 }
