@@ -1,0 +1,185 @@
+/* *
+* GPC SCRIPT
+* 
+*  GPC is a scripting language with C-like syntax.
+*  To learn more access GPC Language Reference on Help menu.
+* *********************************************************** */
+
+int LightWeaveTime = 70;
+int DefaultTime = 100;
+int CrystalFragTime = 900;
+
+define Button_One = 19;  //Xbox One: A  ||  PS4: Cross   //
+define Button_Two = 20;  //Xbox One: X  ||  PS4: Square  //
+define Button_Three = 17;//Xbox One: Y  ||  PS4: Triangle//
+define Button_Four = 18; //Xbox One: B  ||  PS4: Circle  //
+define Right_Bumper = 3;
+define Right_Trigger = 4;
+define Right_Stick_Click = 5;
+define Left_Bumper = 6;
+define Left_Trigger = 7;
+define Left_Stick_Click = 8;
+define Select_Button = 1;
+define Center_Button = 0;
+define Start_Button = 2;
+define D_Up = 13;
+define D_Right = 16;
+define D_Down = 14;
+define D_Left = 15;
+define LeftStick_X = 11;//Left stick left(-100) and right(+100)
+define LeftStick_Y = 12;//Left stick up(-100) and down(+100)
+define RightStick_X = 9;//Right stick left(-100) and right(+100)
+define RightStick_Y = 10;//Right stick up(-100) and down(+100)
+
+//Booleans
+int ReadyForInput = TRUE;
+int RunProgram = FALSE;
+
+//Variables
+int MSElapsed = 0;
+
+int MSCritSurgeTime = 32;
+int MSDaedricSummon = 12;
+int MSLightningFlood = 10;
+int MSElementalBlockaid = 14;
+int MSMysticOrb = 10;
+int MSPotion = 46;
+
+int CritSurgeTimer = 32;
+int DaedricSummonTimer = 12;
+int LightningFloodTimer = 10;
+int ElementalBlockaidTimer = 14;
+int MysticOrbTimer = 10;
+int PotionTimer = 35;
+
+
+main {
+    vm_tctrl(-5); //This should run every 5 MS now
+    
+    if (event_press(D_Right))
+    {
+        RunProgram = !RunProgram;
+    }
+    
+    //Initiate the real time timer
+    MSElapsed = MSElapsed + get_rtime();
+    if(MSElapsed >= 1000){
+        MSElapsed = 0;
+        CritSurgeTimer = CritSurgeTimer + 1;   
+        DaedricSummonTimer = DaedricSummonTimer + 1;
+        LightningFloodTimer = LightningFloodTimer + 1;
+        ElementalBlockaidTimer = ElementalBlockaidTimer + 1;
+        MysticOrbTimer = MysticOrbTimer + 1;
+        PotionTimer = PotionTimer + 1;
+        if(RunProgram){
+            if(CritSurgeTimer >= MSCritSurgeTime && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(CritSurge);
+                }       
+            if(DaedricSummonTimer >= MSDaedricSummon && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(DaedricSummon);
+            }
+            if (LightningFloodTimer >= MSLightningFlood && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(LightingFlood);
+            }
+            if (ElementalBlockaidTimer >= MSElementalBlockaid && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(ElementalBlockaid);
+            }
+            if(PotionTimer >= MSPotion && ReadyForInput)
+            {
+                combo_run(Potion);
+            }
+//            if (MysticOrbTimer >= MSMysticOrb && ReadyForInput){
+//                ReadyForInput = FALSE;
+//               combo_run(MysticOrb);
+//            }
+            
+            if(ReadyForInput)
+            {
+                ReadyForInput = FALSE;
+                combo_run(CrystalFrags);
+            }
+        }
+    }
+}
+
+combo CritSurge {
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Four, 100);    wait(100);
+    set_val(Button_Four, 0);      wait(DefaultTime);
+    CritSurgeTimer = 0;
+    ReadyForInput = TRUE;
+}
+
+combo DaedricSummon {
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Three, 100);    wait(100);
+    set_val(Button_Three, 0);      wait(DefaultTime);
+    DaedricSummonTimer = 0;
+    ReadyForInput = TRUE;
+}
+
+combo LightingFlood {
+    set_val (D_Left, 100); wait(100);
+    set_val (D_Left, 0); wait(300);
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    //Lightning Flood
+    set_val(Button_Three, 100);    wait(100);
+    set_val(Button_Three, 0);      wait(300);    
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    //Mystic Orb
+    set_val(Left_Bumper, 100);    wait(100);
+    set_val(Left_Bumper, 0);      wait(500);
+    LightningFloodTimer = 0;    
+    set_val (D_Left, 100); wait(100);
+    set_val (D_Left, 0); wait(300);
+    ReadyForInput = TRUE;
+}
+
+combo ElementalBlockaid {
+    set_val (D_Left, 100); wait(100);
+    set_val (D_Left, 0); wait(300);
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Four, 100);    wait(100);
+    set_val(Button_Four, 0);      wait(DefaultTime);
+    ElementalBlockaidTimer = 0;
+    set_val (D_Left, 100); wait(100);
+    set_val (D_Left, 0); wait(300);
+    ReadyForInput = TRUE;
+}
+
+combo Potion {
+    set_val(D_Up, 100);    wait(100);
+    set_val(D_Up, 0);      wait(20);
+}
+
+//combo MysticOrb {
+//    set_val (D_Left, 100); wait(40);
+//    set_val (D_Left, 0); wait(200);
+//    set_val(Right_Trigger, 100);    wait(100);
+//    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+ //   set_val(Left_Bumper, 100);    wait(100);
+//    set_val(Left_Bumper, 0);      wait(DefaultTime);
+//    MysticOrbTimer = 0;
+//    set_val (D_Left, 100); wait(40);
+//    set_val (D_Left, 0); wait(250);
+//    ReadyForInput = TRUE;
+//}
+
+combo CrystalFrags {
+    set_val(Right_Bumper,100);  set_val(Left_Bumper,100);     wait(40); 
+    set_val(Right_Bumper, 0);   set_val(Left_Bumper, 0);       wait(150);  // ultimate
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Two, 100);    wait(100);
+    set_val(Button_Two, 0);      wait(CrystalFragTime);
+    ReadyForInput = TRUE;
+}
