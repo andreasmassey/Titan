@@ -42,12 +42,14 @@ int SBoundlessStormTime = 23;
 int SDaedricSummon = 12;
 int SBeastTrap = 12;
 int SElementalBlockaid = 14;
+int SFamiliar = 10;
 int SPotion = 46;
 
 int BoundlessStormTimer = 23;
 int DaedricSummonTimer = 12;
 int BeastTrapTimer = 12;
 int ElementalBlockaidTimer = 14;
+int FamiliarTimer = 10;
 int PotionTimer = 35;
 
 
@@ -67,6 +69,7 @@ main {
         DaedricSummonTimer = DaedricSummonTimer + 1;
         BeastTrapTimer = BeastTrapTimer + 1;
         ElementalBlockaidTimer = ElementalBlockaidTimer + 1;
+        FamiliarTimer = FamiliarTimer + 1;
         PotionTimer = PotionTimer + 1;
         if(RunProgram){
             if(BoundlessStormTimer >= SBoundlessStormTime && ReadyForInput){
@@ -84,6 +87,10 @@ main {
             if (ElementalBlockaidTimer >= SElementalBlockaid && ReadyForInput){
                 ReadyForInput = FALSE;
                 combo_run(ElementalBlockaid);
+            }
+            if (FamiliarTimer >= SFamiliar && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(Familiar);
             }
             if(PotionTimer >= SPotion && ReadyForInput)
             {
