@@ -5,9 +5,12 @@
 *  To learn more access GPC Language Reference on Help menu.
 * *********************************************************** */
 
+//https://www.youtube.com/watch?v=VY47pN-8O5c
+
 int LightWeaveTime = 70;
 int DefaultTime = 100;
-int CrystalFragTime = 900;
+int CrystalFragTime = 700;
+int BarSwap = 400;
 
 define Button_One = 19;  //Xbox One: A  ||  PS4: Cross   //
 define Button_Two = 20;  //Xbox One: X  ||  PS4: Square  //
@@ -43,6 +46,7 @@ int SDaedricSummon = 12;
 int SBeastTrap = 12;
 int SElementalBlockaid = 14;
 int SFamiliar = 10;
+int SElementalWeapon = 5;
 int SPotion = 46;
 
 int BoundlessStormTimer = 23;
@@ -50,6 +54,7 @@ int DaedricSummonTimer = 12;
 int BeastTrapTimer = 12;
 int ElementalBlockaidTimer = 14;
 int FamiliarTimer = 10;
+int ElementalWeaponTimer = 5;
 int PotionTimer = 35;
 
 
@@ -70,27 +75,33 @@ main {
         BeastTrapTimer = BeastTrapTimer + 1;
         ElementalBlockaidTimer = ElementalBlockaidTimer + 1;
         FamiliarTimer = FamiliarTimer + 1;
+        ElementalWeaponTimer = ElementalWeaponTimer + 1;
         PotionTimer = PotionTimer + 1;
         if(RunProgram){
-            if(BoundlessStormTimer >= SBoundlessStormTime && ReadyForInput){
-                ReadyForInput = FALSE;
-                combo_run(BoundlessStorm);
-                }       
             if(DaedricSummonTimer >= SDaedricSummon && ReadyForInput){
                 ReadyForInput = FALSE;
                 combo_run(DaedricSummon);
             }
+            if (BeastTrapTimer >= SBeastTrap && BoundlessStormTimer >= SBoundlessStormTime -2 && ReadyForInput){
+                ReadyForInput = FALSE;
+                    combo_run(AllBackBar);                
+            }
+            if(BoundlessStormTimer >= SBoundlessStormTime && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(BoundlessStorm);
+                }       
             if (BeastTrapTimer >= SBeastTrap && ReadyForInput){
                 ReadyForInput = FALSE;
                     combo_run(BeastTrap);                
             }
-            if (ElementalBlockaidTimer >= SElementalBlockaid && ReadyForInput){
-                ReadyForInput = FALSE;
-                combo_run(ElementalBlockaid);
-            }
             if (FamiliarTimer >= SFamiliar && ReadyForInput){
                 ReadyForInput = FALSE;
                 combo_run(Familiar);
+            }
+            
+            if (ElementalWeaponTimer >= SElementalWeapon && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(ElementalWeapon);
             }
             if(PotionTimer >= SPotion && ReadyForInput)
             {
@@ -108,7 +119,7 @@ main {
 
 combo BoundlessStorm {
     set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (D_Left, 0); wait(BarSwap);
     set_val(Right_Trigger, 100);    wait(100);
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
     set_val(Button_Three, 100);    wait(100);
@@ -116,7 +127,7 @@ combo BoundlessStorm {
     BoundlessStormTimer = 0;
     ReadyForInput = TRUE;
     set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (D_Left, 0); wait(BarSwap);
 }
 
 combo DaedricSummon {
@@ -133,33 +144,75 @@ combo Familiar {
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
     set_val(Left_Bumper, 100);    wait(100);
     set_val(Left_Bumper, 0);      wait(DefaultTime);
-    DaedricSummonTimer = 0;
+    FamiliarTimer = 0;
+    ReadyForInput = TRUE;
+}
+
+combo ElementalWeapon {
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Four, 100);    wait(100);
+    set_val(Button_Four, 0);      wait(DefaultTime);
+    ElementalWeaponTimer = 0;
     ReadyForInput = TRUE;
 }
 
 combo BeastTrap {
     set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (D_Left, 0); wait(BarSwap);
     set_val(Right_Trigger, 100);    wait(100);
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
     set_val(Button_Two, 100);    wait(100);
-    set_val(Button_Two, 0);      wait(DefaultTime);
+    set_val(Button_Two, 0);      wait(150);    
+    set_val(Right_Bumper,100);  set_val(Left_Bumper,100);     wait(40); 
+    set_val(Right_Bumper, 0);   set_val(Left_Bumper, 0);       wait(350);  // ultimate
+    //Elemental Blockaid
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Four, 100);    wait(100);
+    set_val(Button_Four, 0);      wait(300);
     BeastTrapTimer = 0;
     ReadyForInput = TRUE;
     set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (D_Left, 0); wait(BarSwap);
+}
+
+combo AllBackBar {
+set_val (D_Left, 100); wait(100);
+    set_val (D_Left, 0); wait(BarSwap);
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Two, 100);    wait(100);
+    set_val(Button_Two, 0);      wait(150);    
+    set_val(Right_Bumper,100);  set_val(Left_Bumper,100);     wait(40); 
+    set_val(Right_Bumper, 0);   set_val(Left_Bumper, 0);       wait(350);  // ultimate
+    //Elemental Blockaid
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Four, 100);    wait(100);
+    set_val(Button_Four, 0);      wait(500);
+    BeastTrapTimer = 0;
+    //Boundless Storm
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Button_Three, 100);    wait(100);
+    set_val(Button_Three, 0);      wait(500);
+    BoundlessStormTimer = 0;
+    ReadyForInput = TRUE;
+    set_val (D_Left, 100); wait(100);
+    set_val (D_Left, 0); wait(BarSwap);
 }
 
 combo ElementalBlockaid {
     set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (D_Left, 0); wait(BarSwap);
     set_val(Right_Trigger, 100);    wait(100);
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
     set_val(Button_Four, 100);    wait(100);
     set_val(Button_Four, 0);      wait(300);
     ElementalBlockaidTimer = 0;
     set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (D_Left, 0); wait(BarSwap);
     ReadyForInput = TRUE;
 }
 
@@ -169,11 +222,11 @@ combo Potion {
 }
 
 combo CrystalFrags {
-    set_val(Right_Bumper,100);  set_val(Left_Bumper,100);     wait(40); 
-    set_val(Right_Bumper, 0);   set_val(Left_Bumper, 0);       wait(150);  // ultimate
     set_val(Right_Trigger, 100);    wait(100);
     set_val(Right_Trigger, 0);      wait(LightWeaveTime);
     set_val(Button_Two, 100);    wait(100);
-    set_val(Button_Two, 0);      wait(CrystalFragTime);
+    set_val(Button_Two, 0);      wait(CrystalFragTime);    
+    set_val(Right_Bumper,100);  set_val(Left_Bumper,100);     wait(40); 
+    set_val(Right_Bumper, 0);   set_val(Left_Bumper, 0);       wait(350);  // ultimate
     ReadyForInput = TRUE;
 }
