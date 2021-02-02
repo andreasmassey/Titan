@@ -128,6 +128,15 @@ combo DaedricSummon {
     ReadyForInput = TRUE;
 }
 
+combo Familiar {
+    set_val(Right_Trigger, 100);    wait(100);
+    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
+    set_val(Left_Bumper, 100);    wait(100);
+    set_val(Left_Bumper, 0);      wait(DefaultTime);
+    DaedricSummonTimer = 0;
+    ReadyForInput = TRUE;
+}
+
 combo BeastTrap {
     set_val (D_Left, 100); wait(100);
     set_val (D_Left, 0); wait(300);
