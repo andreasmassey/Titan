@@ -1,35 +1,9 @@
-/* *
-* GPC SCRIPT
-* 
-*  GPC is a scripting language with C-like syntax.
-*  To learn more access GPC Language Reference on Help menu.
-* *********************************************************** */
+#include "ColorLED.gph"
+#include "ps4.gph"
 
 int LightWeaveTime = 70;
 int DefaultTime = 100;
 int CrystalFragTime = 900;
-
-define Button_One = 19;  //Xbox One: A  ||  PS4: Cross   //
-define Button_Two = 20;  //Xbox One: X  ||  PS4: Square  //
-define Button_Three = 17;//Xbox One: Y  ||  PS4: Triangle//
-define Button_Four = 18; //Xbox One: B  ||  PS4: Circle  //
-define Right_Bumper = 3;
-define Right_Trigger = 4;
-define Right_Stick_Click = 5;
-define Left_Bumper = 6;
-define Left_Trigger = 7;
-define Left_Stick_Click = 8;
-define Select_Button = 1;
-define Center_Button = 0;
-define Start_Button = 2;
-define D_Up = 13;
-define D_Right = 16;
-define D_Down = 14;
-define D_Left = 15;
-define LeftStick_X = 11;//Left stick left(-100) and right(+100)
-define LeftStick_Y = 12;//Left stick up(-100) and down(+100)
-define RightStick_X = 9;//Right stick left(-100) and right(+100)
-define RightStick_Y = 10;//Right stick up(-100) and down(+100)
 
 //Booleans
 int ReadyForInput = TRUE;
@@ -52,15 +26,17 @@ int PotionTimer = 35;
 
 
 main {
-    vm_tctrl(-5); //This should run every 5 MS now
-    
-    if (event_press(D_Right))
+    if (event_active(PS4_RIGHT))
     {
         RunProgram = !RunProgram;
+		if (RunProgram) 
+			ColorLED(CP,200,200,2,CP);  
+		else 
+			ColorLED(CR,200,200,2,CR);
     }
     
     //Initiate the real time timer
-    MSElapsed = MSElapsed + get_rtime();
+    MSElapsed = MSElapsed + elapsed_time();
     if(MSElapsed >= 1000){
         MSElapsed = 0;
         CritSurgeTimer = CritSurgeTimer + 1;   
@@ -104,91 +80,91 @@ main {
 }
 
 combo CritSurge {
-    set_val(Right_Trigger, 100);    wait(100);
-    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Button_Four, 100);    wait(100);
-    set_val(Button_Four, 0);      wait(DefaultTime);
+    set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    set_val(PS4_CIRCLE, 100);    wait(100);
+    set_val(PS4_CIRCLE, 0);      wait(DefaultTime);
     CritSurgeTimer = 0;
     ReadyForInput = TRUE;
 }
 
 combo DaedricSummon {
-    set_val(Right_Trigger, 100);    wait(100);
-    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Button_Three, 100);    wait(100);
-    set_val(Button_Three, 0);      wait(DefaultTime);
+    set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    set_val(PS4_TRIANGLE, 100);    wait(100);
+    set_val(PS4_TRIANGLE, 0);      wait(DefaultTime);
     DaedricSummonTimer = 0;
     ReadyForInput = TRUE;
 }
 
 combo LF_MO {
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (PS4_LEFT, 100); wait(100);
+    set_val (PS4_LEFT, 0); wait(300);
     //Lightning Flood
-    //set_val(Right_Trigger, 100);    wait(100);
-    //set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    //set_val(Button_Three, 100);    wait(100);
-    //set_val(Button_Three, 0);      wait(300);  
+    set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    set_val(PS4_TRIANGLE, 100);    wait(100);
+    set_val(PS4_TRIANGLE, 0);      wait(300);  
     //Mystic Orb  
-    set_val(Right_Trigger, 100);    wait(100);
-    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Left_Bumper, 100);    wait(100);
-    set_val(Left_Bumper, 0);      wait(500);
+    set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    set_val(PS4_L1, 100);    wait(100);
+    set_val(PS4_L1, 0);      wait(500);
     LightningFloodTimer = 0; 
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (PS4_LEFT, 100); wait(100);
+    set_val (PS4_LEFT, 0); wait(300);
     ReadyForInput = TRUE;
 }
 
 combo LF_MO_EB {
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (PS4_LEFT, 100); wait(100);
+    set_val (PS4_LEFT, 0); wait(300);
     //Lightning Flood
-    //set_val(Right_Trigger, 100);    wait(100);
-    //set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    //set_val(Button_Three, 100);    wait(100);
-    //set_val(Button_Three, 0);      wait(300);  
+    set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    set_val(PS4_TRIANGLE, 100);    wait(100);
+    set_val(PS4_TRIANGLE, 0);      wait(300);  
     //Mystic Orb  
-    set_val(Right_Trigger, 100);    wait(100);
-    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Left_Bumper, 100);    wait(100);
-    set_val(Left_Bumper, 0);      wait(800);
+    set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    set_val(PS4_L1, 100);    wait(100);
+    set_val(PS4_L1, 0);      wait(800);
     LightningFloodTimer = 0;  
     //ElementalBlockaid
-    set_val(Right_Trigger, 100);    wait(100);
-    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Button_Four, 100);    wait(100);
-    set_val(Button_Four, 0);      wait(300);
+    set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    set_val(PS4_CIRCLE, 100);    wait(100);
+    set_val(PS4_CIRCLE, 0);      wait(300);
     ElementalBlockaidTimer = 0;
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (PS4_LEFT, 100); wait(100);
+    set_val (PS4_LEFT, 0); wait(300);
     ReadyForInput = TRUE;
 }
 
 combo ElementalBlockaid {
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
-    set_val(Right_Trigger, 100);    wait(100);
-    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Button_Four, 100);    wait(100);
-    set_val(Button_Four, 0);      wait(300);
+    set_val (PS4_LEFT, 100); wait(100);
+    set_val (PS4_LEFT, 0); wait(300);
+    set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    set_val(PS4_CIRCLE, 100);    wait(100);
+    set_val(PS4_CIRCLE, 0);      wait(300);
     ElementalBlockaidTimer = 0;
-    set_val (D_Left, 100); wait(100);
-    set_val (D_Left, 0); wait(300);
+    set_val (PS4_LEFT, 100); wait(100);
+    set_val (PS4_LEFT, 0); wait(300);
     ReadyForInput = TRUE;
 }
 
 combo Potion {
-    set_val(D_Up, 100);    wait(100);
-    set_val(D_Up, 0);      wait(20);
+    set_val(PS4_UP, 100);    wait(100);
+    set_val(PS4_UP, 0);      wait(20);
 }
 
 combo CrystalFrags {
-    set_val(Right_Bumper,100);  set_val(Left_Bumper,100);     wait(40); 
-    set_val(Right_Bumper, 0);   set_val(Left_Bumper, 0);       wait(150);  // ultimate
-    set_val(Right_Trigger, 100);    wait(100);
-    set_val(Right_Trigger, 0);      wait(LightWeaveTime);
-    set_val(Button_Two, 100);    wait(100);
-    set_val(Button_Two, 0);      wait(CrystalFragTime);
+    set_val(PS4_R1,100);  set_val(PS4_L1,100);     wait(40); 
+    set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(150);  // ultimate
+    set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    set_val(PS4_SQUARE, 100);    wait(100);
+    set_val(PS4_SQUARE, 0);      wait(CrystalFragTime);
     ReadyForInput = TRUE;
 }

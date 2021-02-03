@@ -1,19 +1,12 @@
-//#include "titanone.gph"
 #include "ColorLED.gph"
 #include "ps4.gph"
-/* *
-* GPC SCRIPT
-* 
-*  GPC is a scripting language with C-like syntax.
-*  To learn more access GPC Language Reference on Help menu.
-* *********************************************************** */
 
 //https://www.youtube.com/watch?v=VY47pN-8O5c
 
 int LightWeaveTime = 70;
 int DefaultTime = 100;
 int CrystalFragTime = 700;
-int BarSwap = 400;
+int BarSwapTime = 400;
 
 //Booleans
 bool ReadyForInput = TRUE;
@@ -40,13 +33,13 @@ int PotionTimer = 35;
 
 
 main {
-    //vm_tctrl(-5); //This should run every 5 MS now
-    
     if (event_active(PS4_RIGHT))
     {
         RunProgram = !RunProgram;
-		if (RunProgram) ColorLED(CP,200,200,2,CP);  
-            else ColorLED(CR,200,200,2,CR);
+		if (RunProgram) 
+			ColorLED(CP,200,200,2,CP);  
+		else 
+			ColorLED(CR,200,200,2,CR);
     }
     
     //Initiate the real time timer
@@ -100,32 +93,41 @@ main {
     }
 }
 
-combo BoundlessStorm {
-    set_val (PS4_LEFT, 100); wait(100);
-    set_val (PS4_LEFT, 0); wait(BarSwap);
-    set_val(PS4_R2, 100);    wait(100);
+combo LightAttack{
+	set_val(PS4_R2, 100);    wait(100);
     set_val(PS4_R2, 0);      wait(LightWeaveTime);
+}
+
+combo BarSwap{
+    set_val (PS4_LEFT, 100); wait(100);
+    set_val (PS4_LEFT, 0); wait(BarSwapTime);
+}
+
+combo Ultimate {	
+    set_val(PS4_R1,100);  set_val(PS4_L1,100);     wait(40); 
+    set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(350);  
+}
+
+combo BoundlessStorm {
+    call(BarSwap);
+    call (LightAttack);
     set_val(PS4_TRIANGLE, 100);    wait(100);
     set_val(PS4_TRIANGLE, 0);      wait(DefaultTime);
     BoundlessStormTimer = 0;
     ReadyForInput = TRUE;
-    set_val (PS4_LEFT, 100); wait(100);
-    set_val (PS4_LEFT, 0); wait(BarSwap);
+    call(BarSwap);
 }
 
 combo DaedricSummon {
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call (LightAttack);
     set_val(PS4_TRIANGLE, 100);    wait(100);
     set_val(PS4_TRIANGLE, 0);      wait(DefaultTime);
     DaedricSummonTimer = 0;		
-	printf("starting combo cLoop, loops left: %d",ReadyForInput);
     ReadyForInput = TRUE;
 }
 
 combo Familiar {
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call (LightAttack);
     set_val(PS4_L1, 100);    wait(100);
     set_val(PS4_L1, 0);      wait(DefaultTime);
     FamiliarTimer = 0;
@@ -133,8 +135,7 @@ combo Familiar {
 }
 
 combo ElementalWeapon {
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call (LightAttack);
     set_val(PS4_CIRCLE, 100);    wait(100);
     set_val(PS4_CIRCLE, 0);      wait(DefaultTime);
     ElementalWeaponTimer = 0;
@@ -142,61 +143,47 @@ combo ElementalWeapon {
 }
 
 combo BeastTrap {
-    set_val (PS4_LEFT, 100); wait(100);
-    set_val (PS4_LEFT, 0); wait(BarSwap);
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call(BarSwap);
+    call (LightAttack);
     set_val(PS4_SQUARE, 100);    wait(100);
     set_val(PS4_SQUARE, 0);      wait(150);    
-    set_val(PS4_R1,100);  set_val(PS4_L1,100);     wait(40); 
-    set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(350);  // ultimate
+	call(Ultimate);
     //Elemental Blockaid
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call (LightAttack);
     set_val(PS4_CIRCLE, 100);    wait(100);
     set_val(PS4_CIRCLE, 0);      wait(300);
     BeastTrapTimer = 0;
     ReadyForInput = TRUE;
-    set_val (PS4_LEFT, 100); wait(100);
-    set_val (PS4_LEFT, 0); wait(BarSwap);
+    call(BarSwap);
 }
 
 combo AllBackBar {
-set_val (PS4_LEFT, 100); wait(100);
-    set_val (PS4_LEFT, 0); wait(BarSwap);
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call(BarSwap);
+    call (LightAttack);
     set_val(PS4_SQUARE, 100);    wait(100);
-    set_val(PS4_SQUARE, 0);      wait(150);    
-    set_val(PS4_R1,100);  set_val(PS4_L1,100);     wait(40); 
-    set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(350);  // ultimate
+    set_val(PS4_SQUARE, 0);      wait(150);       
+	call(Ultimate);
     //Elemental Blockaid
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call (LightAttack);
     set_val(PS4_CIRCLE, 100);    wait(100);
     set_val(PS4_CIRCLE, 0);      wait(500);
     BeastTrapTimer = 0;
     //Boundless Storm
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call (LightAttack);
     set_val(PS4_TRIANGLE, 100);    wait(100);
     set_val(PS4_TRIANGLE, 0);      wait(500);
     BoundlessStormTimer = 0;
     ReadyForInput = TRUE;
-    set_val (PS4_LEFT, 100); wait(100);
-    set_val (PS4_LEFT, 0); wait(BarSwap);
+    call(BarSwap);
 }
 
 combo ElementalBlockaid {
-    set_val (PS4_LEFT, 100); wait(100);
-    set_val (PS4_LEFT, 0); wait(BarSwap);
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call(BarSwap);
+    call (LightAttack);
     set_val(PS4_CIRCLE, 100);    wait(100);
     set_val(PS4_CIRCLE, 0);      wait(300);
     ElementalBlockaidTimer = 0;
-    set_val (PS4_LEFT, 100); wait(100);
-    set_val (PS4_LEFT, 0); wait(BarSwap);
+    call(BarSwap);
     ReadyForInput = TRUE;
 }
 
@@ -206,11 +193,9 @@ combo Potion {
 }
 
 combo CrystalFrags {
-    set_val(PS4_R2, 100);    wait(100);
-    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+    call (LightAttack);
     set_val(PS4_SQUARE, 100);    wait(100);
-    set_val(PS4_SQUARE, 0);      wait(CrystalFragTime);    
-    set_val(PS4_R1,100);  set_val(PS4_L1,100);     wait(40); 
-    set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(350);  // ultimate
+    set_val(PS4_SQUARE, 0);      wait(CrystalFragTime);      
+	call(Ultimate);
     ReadyForInput = TRUE;
 }
