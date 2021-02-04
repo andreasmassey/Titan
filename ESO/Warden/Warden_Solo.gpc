@@ -1,0 +1,197 @@
+#include "ColorLED.gph"
+#include "ps4.gph"
+
+int LightWeaveTime = 70;
+int DefaultTime = 100;
+int CrystalFragTime = 700;
+int BarSwapTime = 400;
+
+//Booleans
+bool ReadyForInput = TRUE;
+bool RunProgram = FALSE;
+
+//Variables
+int MSElapsed = 0;
+
+int SLivingTrellis = 11;
+int SBlueBetty = 25;
+int SAnnulment = 6;
+int SUnstableWall = 10;
+int SElementalDrain = 23;
+int SOrb = 10;
+int SWintersRevenge = 12;
+int SPotion = 46;
+
+int LivingTrellisTimer = 11;
+int BlueBettyTimer = 25;
+int AnnulmentTimer = 6;
+int UnstableWallTimer = 10;
+int ElementalDrainTimer = 23;
+int OrbTimer = 10;
+int WintersReventTimer = 12;
+int PotionTimer = 35;
+
+
+main {
+    if (event_active(PS4_RIGHT))
+    {
+        RunProgram = !RunProgram;
+		if (RunProgram) 
+			ColorLED(CP,200,200,2,CP);  
+		else 
+			ColorLED(CR,200,200,2,CR);
+    }
+    
+    //Initiate the real time timer
+    MSElapsed = MSElapsed + elapsed_time();
+    if(MSElapsed >= 1000){
+        MSElapsed = 0;
+        LivingTrellisTimer = LivingTrellisTimer + 1; 		
+        BlueBettyTimer = BlueBettyTimer + 1;		
+        AnnulmentTimer = AnnulmentTimer + 1;		
+        UnstableWallTimer = UnstableWallTimer + 1;		
+        ElementalDrainTimer = ElementalDrainTimer + 1;
+		OrbTimer = OrbTimer + 1;
+        WintersReventTimer = WintersReventTimer + 1;
+        PotionTimer = PotionTimer + 1;
+        if(RunProgram){
+            if(LivingTrellisTimer >= SLivingTrellis && ReadyForInput) {		
+                ReadyForInput = FALSE;
+                combo_run(LivingTrellis);
+            }
+            if (BlueBettyTimer >= SBlueBetty && ReadyForInput){
+                ReadyForInput = FALSE;
+				combo_run(BlueBetty);                
+            }
+            if(AnnulmentTimer >= SAnnulment && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(Annulment);
+                }       
+            if (UnstableWallTimer >= SUnstableWall && ReadyForInput){
+                ReadyForInput = FALSE;
+				combo_run(UnstableWall);                
+            }
+            if (ElementalDrainTimer >= SElementalDrain && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(ElementalDrain);
+            }
+            
+            if (OrbTimer >= SOrb && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(Orb);
+            }
+            
+            if (WintersReventTimer >= SWintersRevenge && ReadyForInput){
+                ReadyForInput = FALSE;
+                combo_run(WintersRevenge);
+            }
+			
+            if(PotionTimer >= SPotion && ReadyForInput)
+            {
+                combo_run(Potion);
+            }
+            
+            if(ReadyForInput)
+            {
+                ReadyForInput = FALSE;
+                combo_run(MainAttack);
+            }
+        }
+    }
+}
+
+combo LightAttack{
+	set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+}
+
+combo BarSwap{
+    set_val (PS4_LEFT, 100); wait(100);
+    set_val (PS4_LEFT, 0); wait(BarSwapTime);
+}
+
+combo Ultimate {	
+    set_val(PS4_R1,100);  set_val(PS4_L1,100);     wait(40); 
+    set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(50);  
+}
+
+combo LivingTrellis {
+    call (LightAttack);
+    set_val(PS4_TRIANGLE, 100);    wait(100);
+    set_val(PS4_TRIANGLE, 0);      wait(DefaultTime);
+    LivingTrellisTimer = 0;		       
+	call(Ultimate);
+    ReadyForInput = TRUE;
+}
+
+combo BlueBetty {
+    call(BarSwap);
+    call (LightAttack);
+    set_val(PS4_L1, 100);    wait(100);
+    set_val(PS4_L1, 0);      wait(150);       
+    BlueBettyTimer = 0;
+    ReadyForInput = TRUE;
+    call(BarSwap);
+}
+
+combo Annulment {
+    call (LightAttack);
+    set_val(PS4_R1, 100);    wait(100);
+    set_val(PS4_R1, 0);      wait(DefaultTime);
+    AnnulmentTimer = 0;       
+	call(Ultimate);
+    ReadyForInput = TRUE;
+}
+
+combo UnstableWall {
+    call(BarSwap);
+    call (LightAttack);
+    set_val(PS4_CIRCLE, 100);    wait(100);
+    set_val(PS4_CIRCLE, 0);      wait(DefaultTime);
+    UnstableWallTimer = 0;
+    ReadyForInput = TRUE;
+    call(BarSwap);
+}
+
+combo ElementalDrain {
+    call(BarSwap);
+    call (LightAttack);
+    set_val(PS4_SQUARE, 100);    wait(100);
+    set_val(PS4_SQUARE, 0);      wait(DefaultTime);
+    ElementalDrainTimer = 0;
+    ReadyForInput = TRUE;
+    call(BarSwap);
+}
+
+combo Orb {
+    call(BarSwap);
+    call (LightAttack);
+    set_val(PS4_R1, 100);    wait(100);
+    set_val(PS4_R1, 0);      wait(DefaultTime);
+    OrbTimer = 0;
+    ReadyForInput = TRUE;
+    call(BarSwap);
+}
+
+combo WintersRevenge {
+    call(BarSwap);
+    call (LightAttack);
+    set_val(PS4_TRIANGLE, 100);    wait(100);
+    set_val(PS4_TRIANGLE, 0);      wait(DefaultTime);
+    WintersReventTimer = 0;
+    call(BarSwap);
+    ReadyForInput = TRUE;
+}
+
+combo Potion {
+    set_val(PS4_UP, 100);    wait(100);
+    set_val(PS4_UP, 0);      wait(20);
+}
+
+combo MainAttack {
+    call (LightAttack);
+    set_val(PS4_SQUARE, 100);    wait(100);
+    set_val(PS4_SQUARE, 0);      wait(DefaultTime);      
+	call(Ultimate);
+    ReadyForInput = TRUE;
+}
