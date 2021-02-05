@@ -1,0 +1,65 @@
+#pragma METAINFO("Stamplar", 1, 0, "GrandpaMike")
+#include "ColorLED.gph"
+#include "ps4.gph"
+bool Toggle=FALSE;
+
+int POT_Timer = 0; 
+int HAIL_Timer = 0;
+int TRAP_Timer = 6;
+//int ULT_Timer = 0;
+int MSElapsed = 0;
+
+main {
+            MSElapsed += elapsed_time();
+            if(MSElapsed >= 1000){
+                                  MSElapsed = 0;
+                                  POT_Timer = POT_Timer - 1;
+                                  HAIL_Timer = HAIL_Timer - 1;
+                                  TRAP_Timer = TRAP_Timer - 1;
+                               //   ULT_Timer = ULT_Timer - 1;
+                               //   printf("ULT_Timer: %d",ULT_Timer);
+            }
+     if (event_active(PS4_RIGHT)) { 
+            Toggle=!Toggle;
+            if (Toggle) ColorLED(CP,200,200,2,CP);  
+            else ColorLED(CR,200,200,2,CR); combo_stop(ROTATION); 
+          }
+         
+          if (Toggle) {combo_run(ROTATION); } 
+         
+     }
+
+// still need to weave in the pots and the ultimate
+combo ROTATION
+{ 
+  if (HAIL_Timer <= 0 ) call(HAIL);
+  if (TRAP_Timer <= 0 && HAIL_Timer > 0) call(TRAP);
+  if (POT_Timer <= 0) call(DO_POT);   
+  set_val(PS4_R2,100);  wait(40); set_val(PS4_R2,0);   wait(40);   // Light Attack
+  set_val(PS4_R1,100);  wait(40); set_val(PS4_R1, 0);  wait(1100);  // Biting Jabs
+  //  if (ULT_Timer <= 0) call(ULTIMATE);
+}
+combo TRAP    {
+                   set_val(PS4_TRIANGLE,100); wait(40); set_val(PS4_TRIANGLE, 0); wait(40);   // Barbed Trap
+                   TRAP_Timer = 17;
+              }
+
+combo DO_POT  {
+                    set_val(PS4_UP,100);   wait(40); set_val(PS4_UP,0);     wait(40);          // potion
+                    POT_Timer = 46;
+              }
+
+combo HAIL    {
+                    set_val(PS4_LEFT,100);    wait(40); set_val(PS4_LEFT, 0);    wait(40);    // Bar Switch
+                    set_val(PS4_SQUARE,100);  wait(120); set_val(PS4_SQUARE, 0);  wait(550);  // Endless Hail
+                    set_val(PS4_LEFT,100);    wait(40); set_val(PS4_LEFT, 0);    wait(50);    // Bar Switch
+                    HAIL_Timer = 12;
+              }
+/* combo ULTIMATE {
+     set_val(PS4_R1,100);  set_val(PS4_L1,100); wait(35); set_val(PS4_R1, 0);set_val(PS4_L1, 0); wait(35);
+     ULT_Timer = 28;
+               }
+
+
+    set_val(PS4_SQUARE, 100); wait(40); set_val(PS4_SQUARE, 0); wait(100);  // Blazing Spear
+*/
