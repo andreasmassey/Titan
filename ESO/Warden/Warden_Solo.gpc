@@ -1,3 +1,4 @@
+#pragma METAINFO("warden_solo", 1, 0, "Andreas")
 #include "ColorLED.gph"
 #include "ps4.gph"
 
@@ -21,6 +22,7 @@ int SElementalDrain = 23;
 int SOrb = 10;
 int SWintersRevenge = 12;
 int SPotion = 46;
+int SBarSwap = 2;
 
 int LivingTrellisTimer = 11;
 int BlueBettyTimer = 25;
@@ -30,6 +32,7 @@ int ElementalDrainTimer = 23;
 int OrbTimer = 10;
 int WintersReventTimer = 12;
 int PotionTimer = 35;
+int BarSwapTimer = 2;
 
 
 main {
@@ -54,34 +57,35 @@ main {
 		OrbTimer = OrbTimer + 1;
         WintersReventTimer = WintersReventTimer + 1;
         PotionTimer = PotionTimer + 1;
+		BarSwapTimer = BarSwapTimer + 1;
         if(RunProgram){
-            if(LivingTrellisTimer >= SLivingTrellis && ReadyForInput) {		
+            if(LivingTrellisTimer >= SLivingTrellis && ReadyForInput && BarSwapTimer >= SBarSwap) {		
                 ReadyForInput = FALSE;
                 combo_run(LivingTrellis);
             }
-            if (BlueBettyTimer >= SBlueBetty && ReadyForInput){
+            if (BlueBettyTimer >= SBlueBetty && ReadyForInput && BarSwapTimer >= SBarSwap){
                 ReadyForInput = FALSE;
 				combo_run(BlueBetty);                
             }
-            if(AnnulmentTimer >= SAnnulment && ReadyForInput){
+            if(AnnulmentTimer >= SAnnulment && ReadyForInput && BarSwapTimer >= SBarSwap){
                 ReadyForInput = FALSE;
                 combo_run(Annulment);
                 }       
-            if (UnstableWallTimer >= SUnstableWall && ReadyForInput){
+            if (UnstableWallTimer >= SUnstableWall && ReadyForInput && BarSwapTimer >= SBarSwap){
                 ReadyForInput = FALSE;
 				combo_run(UnstableWall);                
             }
-            if (ElementalDrainTimer >= SElementalDrain && ReadyForInput){
+            if (ElementalDrainTimer >= SElementalDrain && ReadyForInput && BarSwapTimer >= SBarSwap){
                 ReadyForInput = FALSE;
                 combo_run(ElementalDrain);
             }
             
-            if (OrbTimer >= SOrb && ReadyForInput){
+            if (OrbTimer >= SOrb && ReadyForInput && BarSwapTimer >= SBarSwap){
                 ReadyForInput = FALSE;
                 combo_run(Orb);
             }
             
-            if (WintersReventTimer >= SWintersRevenge && ReadyForInput){
+            if (WintersReventTimer >= SWintersRevenge && ReadyForInput && BarSwapTimer >= SBarSwap){
                 ReadyForInput = FALSE;
                 combo_run(WintersRevenge);
             }
@@ -108,6 +112,7 @@ combo LightAttack{
 combo BarSwap{
     set_val (PS4_LEFT, 100); wait(100);
     set_val (PS4_LEFT, 0); wait(BarSwapTime);
+	BarSwapTimer = 0;
 }
 
 combo Ultimate {	

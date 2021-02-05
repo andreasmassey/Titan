@@ -1,3 +1,4 @@
+#pragma METAINFO("sorc_pet", 1, 0, "Andreas")
 #include "ColorLED.gph"
 #include "ps4.gph"
 
@@ -20,7 +21,7 @@ int SDaedricSummon = 12;
 int SBeastTrap = 12;
 int SElementalBlockaid = 14;
 int SFamiliar = 10;
-int SElementalWeapon = 5;
+int SElementalWeapon = 33;
 int SPotion = 46;
 
 int BoundlessStormTimer = 23;
@@ -28,7 +29,7 @@ int DaedricSummonTimer = 12;
 int BeastTrapTimer = 12;
 int ElementalBlockaidTimer = 14;
 int FamiliarTimer = 10;
-int ElementalWeaponTimer = 5;
+int ElementalWeaponTimer = 33;
 int PotionTimer = 35;
 
 
