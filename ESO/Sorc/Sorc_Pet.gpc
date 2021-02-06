@@ -109,6 +109,12 @@ combo Ultimate {
     set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(350);  
 }
 
+combo Potion {
+    set_val(PS4_UP, 100);    wait(100);
+    set_val(PS4_UP, 0);      wait(20);
+	PotionTimer = 0;
+}
+
 combo BoundlessStorm {
     call(BarSwap);
     call (LightAttack);
@@ -186,11 +192,6 @@ combo ElementalBlockaid {
     ElementalBlockaidTimer = 0;
     call(BarSwap);
     ReadyForInput = TRUE;
-}
-
-combo Potion {
-    set_val(PS4_UP, 100);    wait(100);
-    set_val(PS4_UP, 0);      wait(20);
 }
 
 combo CrystalFrags {
