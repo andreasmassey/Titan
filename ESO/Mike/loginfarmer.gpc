@@ -4,7 +4,7 @@
 
  
 bool Toggle=FALSE;
-int LOOP = 3;
+int LOOP = 7;
 int	iLoop;
 main {
          if (event_active(BUTTON_13)) {              //IF I hit the start stop key dpad right
@@ -20,7 +20,7 @@ main {
                 if (!lootandlog) { // combo is not running at the moment
                                   printf("loop counter before rotation %d",iLoop); // write text to the Output Panel
                                   combo_run(lootandlog);
-                                  if(!SELECT_NEXT)iLoop--; 
+                                 iLoop--; 
                                  }
                             } 
              else if (!lootandlog){combo_run(SELECT_FIRST); }
@@ -28,24 +28,19 @@ main {
      }
 
 combo lootandlog {
-    set_val(BUTTON_16, 100);  wait(200);   set_val(BUTTON_16, 0); wait(32767); wait(8000);  // press x to login
+    set_val(BUTTON_16, 100);  wait(300);   set_val(BUTTON_16, 0); wait(32767); wait(32767); wait(8000); // press x to login
     set_val(STICK_1_Y, 100);  wait(1200);  set_val(STICK_1_Y, 0); wait(500);                 // lookdown
-    set_val(BUTTON_16, 100);  wait(200);   set_val(BUTTON_16, 0); wait(4100);                // press x to loot
-    set_val(BUTTON_3,  100);  wait(200);   set_val(BUTTON_3,  0); wait(500);                 // press options
-    set_val(BUTTON_5,  100);  wait(200);   set_val(BUTTON_5,  0); wait(500);                 // press R2 to jump to the logout option
-    set_val(BUTTON_16, 100);  wait(200);   set_val(BUTTON_16, 0); wait(500);                 // press x to logout
-    set_val(BUTTON_16, 100);  wait(200);   set_val(BUTTON_16, 0); wait(32000);   // press x to confirm logout   
-    if (iLoop < LOOP) call(SELECT_NEXT);  
+    set_val(BUTTON_16, 100);  wait(300);   set_val(BUTTON_16, 0); wait(4100);                // press x to loot
+    set_val(BUTTON_3,  100);  wait(300);   set_val(BUTTON_3,  0); wait(500);                 // press options
+    set_val(BUTTON_5,  100);  wait(300);   set_val(BUTTON_5,  0); wait(500);                 // press R2 to jump to the logout option
+    set_val(BUTTON_16, 100);  wait(300);   set_val(BUTTON_16, 0); wait(500);                 // press x to logout
+    set_val(BUTTON_16, 100);  wait(300);   set_val(BUTTON_16, 0); wait(32767);  // press x to confirm logout   
+    set_val(BUTTON_11, 100);  wait(200);   set_val(BUTTON_11, 0); wait(1000);                // press dpad down to select the next character
   
 }
 
 combo SELECT_FIRST {
-                 set_val(BUTTON_8, 100.00);   wait(500);   set_val(BUTTON_8, 0.00);  wait(500);   //move to the top character
+                 set_val(BUTTON_8, 100.00);   wait(200);   set_val(BUTTON_8, 0.00);  wait(500);   //move to the top character
                  iLoop = LOOP; 
                  printf("Selecting First toon: %d",iLoop);
-}
-
-combo SELECT_NEXT {
-                   set_val(BUTTON_11, 100);  wait(200);   set_val(BUTTON_11, 0); wait(300);                // press dpad down to select the next character
-                   printf("Selecting Next toon: %d",iLoop);
 }
