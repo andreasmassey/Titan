@@ -10,6 +10,7 @@ int BarSwapTime = 400;
 //Booleans
 bool ReadyForInput = TRUE;
 bool RunProgram = FALSE;
+bool FirstTimeRun = TRUE;
 
 //Variables
 int MSElapsed = 0;
@@ -91,27 +92,32 @@ main {
                 combo_run(MainBarRightBumper);
             }
 			
-			if(BackBarSquareTimer <= 0 && ReadyForInput && BarSwapTimer <= 0) {		
+			if (FirstTimeRun && ReadyForInput) {
+                ReadyForInput = FALSE;
+                combo_run(RunAllBackBar);
+			}
+			
+			if(BackBarSquareTimer <= 0 && ReadyForInput && BarSwapTimer <= 0 && FirstTimeRun == FALSE) {		
                 ReadyForInput = FALSE;
                 combo_run(BackBarSquare);
             }
 			
-			if(BackBarCircleTimer <= 0 && ReadyForInput && BarSwapTimer <= 0) {		
+			if(BackBarCircleTimer <= 0 && ReadyForInput && BarSwapTimer <= 0&& FirstTimeRun == FALSE) {		
                 ReadyForInput = FALSE;
                 combo_run(BackBarCircle);
             }
 			
-			if(BackBarTriangleTimer <= 0 && ReadyForInput && BarSwapTimer <= 0) {		
+			if(BackBarTriangleTimer <= 0 && ReadyForInput && BarSwapTimer <= 0&& FirstTimeRun == FALSE) {		
                 ReadyForInput = FALSE;
                 combo_run(BackBarTriangle);
             }
 			
-			if(BackBarLeftBumperTimer <= 0 && ReadyForInput && BarSwapTimer <= 0) {		
+			if(BackBarLeftBumperTimer <= 0 && ReadyForInput && BarSwapTimer <= 0&& FirstTimeRun == FALSE) {		
                 ReadyForInput = FALSE;
                 combo_run(BackBarLeftBumper);
             }
 			
-			if(BackBarRightBumperTimer <= 0 && ReadyForInput && BarSwapTimer <= 0) {		
+			if(BackBarRightBumperTimer <= 0 && ReadyForInput && BarSwapTimer <= 0&& FirstTimeRun == FALSE) {		
                 ReadyForInput = FALSE;
                 combo_run(BackBarRightBumper);
             }
@@ -171,43 +177,85 @@ combo MainBarRightBumper {
 }
 
 combo BackBarSquare {
+	call BarSwap();
     call (LightAttack);
     set_val(PS4_SQUARE, 100);    wait(100);
-    set_val(PS4_SQUARE, 0);      wait(MainAttackCastTime);   
+    set_val(PS4_SQUARE, 0);      wait(DefaultCastTime);   
 	BackBarSquareTimer = SBackBarSquare;	
     ReadyForInput = TRUE;
+	call BarSwap();
 }
 
 combo BackBarCircle {
+	call BarSwap();
     call (LightAttack);
     set_val(PS4_CIRCLE, 100);    wait(100);
     set_val(PS4_CIRCLE, 0);      wait(DefaultCastTime);
     BackBarCircleTimer = SBackBarCircle;
     ReadyForInput = TRUE;
+	call BarSwap();
 }
 
 combo BackBarTriangle {
+	call BarSwap();
 	call (LightAttack);
     set_val(PS4_TRIANGLE, 100);    wait(100);
     set_val(PS4_TRIANGLE, 0);      wait(DefaultCastTime);
     BackBarCircleTimer = SBackBarTriangle;
     ReadyForInput = TRUE;
+	call BarSwap();
 }
 
 combo BackBarLeftBumper {
+	call BarSwap();
 	call (LightAttack);
     set_val(PS4_L1, 100);    wait(100);
     set_val(PS4_L1, 0);      wait(DefaultCastTime);
     BackBarCircleTimer = SBackBarLeftBumper;
     ReadyForInput = TRUE;
+	call BarSwap();
 }
 
 combo BackBarRightBumper {
+	call BarSwap();
 	call (LightAttack);
     set_val(PS4_R1, 100);    wait(100);
     set_val(PS4_R1, 0);      wait(DefaultCastTime);
     BackBarCircleTimer = SBackBarRightBumper;
     ReadyForInput = TRUE;
+	call BarSwap();
+}
+
+combo RunAllBackBar {
+	call BarSwap();
+	//Square
+	call (LightAttack);
+    set_val(PS4_SQUARE, 100);    wait(100);
+    set_val(PS4_SQUARE, 0);      wait(DefaultCastTime);   
+	BackBarSquareTimer = SBackBarSquare;
+	//Circle
+	call (LightAttack);
+    set_val(PS4_CIRCLE, 100);    wait(100);
+    set_val(PS4_CIRCLE, 0);      wait(DefaultCastTime);
+    BackBarCircleTimer = SBackBarCircle;
+	//Triangle
+	call (LightAttack);
+    set_val(PS4_TRIANGLE, 100);    wait(100);
+    set_val(PS4_TRIANGLE, 0);      wait(DefaultCastTime);
+    BackBarCircleTimer = SBackBarTriangle;
+	//Left Bumper
+	call (LightAttack);
+    set_val(PS4_L1, 100);    wait(100);
+    set_val(PS4_L1, 0);      wait(DefaultCastTime);
+    BackBarCircleTimer = SBackBarLeftBumper;
+	//Right Bumper
+	call (LightAttack);
+    set_val(PS4_R1, 100);    wait(100);
+    set_val(PS4_R1, 0);      wait(DefaultCastTime);
+    BackBarCircleTimer = SBackBarRightBumper;
+    ReadyForInput = TRUE;
+	FirstTimeRun = FALSE;
+	call BarSwap();
 }
 
 combo LightAttack{
