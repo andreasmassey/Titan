@@ -89,7 +89,7 @@ main {
             {
                 ReadyForInput = FALSE;
                 combo_run(CrystalFrags);
-            }
+            }			 
         }
     }
 }
@@ -107,6 +107,11 @@ combo BarSwap{
 combo Ultimate {	
     set_val(PS4_R1,100);  set_val(PS4_L1,100);     wait(40); 
     set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(350);  
+}
+
+combo Synergy {	
+    set_val(PS4_TRIANGLE,100);  set_val(PS4_CIRCLE,100);     wait(40); 
+    set_val(PS4_TRIANGLE, 0);   set_val(PS4_CIRCLE, 0);       wait(40);  
 }
 
 combo Potion {
@@ -197,7 +202,8 @@ combo ElementalBlockaid {
 combo CrystalFrags {
     call (LightAttack);
     set_val(PS4_SQUARE, 100);    wait(100);
-    set_val(PS4_SQUARE, 0);      wait(CrystalFragTime);      
+    set_val(PS4_SQUARE, 0);      wait(CrystalFragTime);    
+	combo_run(Synergy);  
 	call(Ultimate);
     ReadyForInput = TRUE;
 }

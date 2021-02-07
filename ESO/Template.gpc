@@ -156,7 +156,7 @@ combo MainBarTriangle {
 	call (LightAttack);
     set_val(PS4_TRIANGLE, 100);    wait(100);
     set_val(PS4_TRIANGLE, 0);      wait(DefaultCastTime);
-    MainBarCircleTimer = SMainBarTriangle;
+    MainBarTriangleTimer = SMainBarTriangle;
     ReadyForInput = TRUE;
 }
 
@@ -164,7 +164,7 @@ combo MainBarLeftBumper {
 	call (LightAttack);
     set_val(PS4_L1, 100);    wait(100);
     set_val(PS4_L1, 0);      wait(DefaultCastTime);
-    MainBarCircleTimer = SMainBarLeftBumper;
+    MainBarLeftBumperTimer = SMainBarLeftBumper;
     ReadyForInput = TRUE;
 }
 
@@ -172,62 +172,62 @@ combo MainBarRightBumper {
 	call (LightAttack);
     set_val(PS4_R1, 100);    wait(100);
     set_val(PS4_R1, 0);      wait(DefaultCastTime);
-    MainBarCircleTimer = SMainBarRightBumper;
+    MainBarRightBumperTimer = SMainBarRightBumper;
     ReadyForInput = TRUE;
 }
 
 combo BackBarSquare {
-	call BarSwap();
+	call (BarSwap);
     call (LightAttack);
     set_val(PS4_SQUARE, 100);    wait(100);
     set_val(PS4_SQUARE, 0);      wait(DefaultCastTime);   
 	BackBarSquareTimer = SBackBarSquare;	
     ReadyForInput = TRUE;
-	call BarSwap();
+	call (BarSwap);
 }
 
 combo BackBarCircle {
-	call BarSwap();
+	call (BarSwap);
     call (LightAttack);
     set_val(PS4_CIRCLE, 100);    wait(100);
     set_val(PS4_CIRCLE, 0);      wait(DefaultCastTime);
     BackBarCircleTimer = SBackBarCircle;
     ReadyForInput = TRUE;
-	call BarSwap();
+	call (BarSwap);
 }
 
 combo BackBarTriangle {
-	call BarSwap();
+	call (BarSwap);
 	call (LightAttack);
     set_val(PS4_TRIANGLE, 100);    wait(100);
     set_val(PS4_TRIANGLE, 0);      wait(DefaultCastTime);
-    BackBarCircleTimer = SBackBarTriangle;
+    BackBarTriangleTimer = SBackBarTriangle;
     ReadyForInput = TRUE;
-	call BarSwap();
+	call (BarSwap);
 }
 
 combo BackBarLeftBumper {
-	call BarSwap();
+	call (BarSwap);
 	call (LightAttack);
     set_val(PS4_L1, 100);    wait(100);
     set_val(PS4_L1, 0);      wait(DefaultCastTime);
-    BackBarCircleTimer = SBackBarLeftBumper;
+    BackBarLeftBumperTimer = SBackBarLeftBumper;
     ReadyForInput = TRUE;
-	call BarSwap();
+	call (BarSwap);
 }
 
 combo BackBarRightBumper {
-	call BarSwap();
+	call (BarSwap);
 	call (LightAttack);
     set_val(PS4_R1, 100);    wait(100);
     set_val(PS4_R1, 0);      wait(DefaultCastTime);
-    BackBarCircleTimer = SBackBarRightBumper;
+    BackBarRightBumperTimer = SBackBarRightBumper;
     ReadyForInput = TRUE;
-	call BarSwap();
+	call (BarSwap);
 }
 
 combo RunAllBackBar {
-	call BarSwap();
+	call (BarSwap);
 	//Square
 	call (LightAttack);
     set_val(PS4_SQUARE, 100);    wait(100);
@@ -242,20 +242,20 @@ combo RunAllBackBar {
 	call (LightAttack);
     set_val(PS4_TRIANGLE, 100);    wait(100);
     set_val(PS4_TRIANGLE, 0);      wait(DefaultCastTime);
-    BackBarCircleTimer = SBackBarTriangle;
+    BackBarTriangleTimer = SBackBarTriangle;
 	//Left Bumper
 	call (LightAttack);
     set_val(PS4_L1, 100);    wait(100);
     set_val(PS4_L1, 0);      wait(DefaultCastTime);
-    BackBarCircleTimer = SBackBarLeftBumper;
+    BackBarLeftBumperTimer = SBackBarLeftBumper;
 	//Right Bumper
 	call (LightAttack);
     set_val(PS4_R1, 100);    wait(100);
     set_val(PS4_R1, 0);      wait(DefaultCastTime);
-    BackBarCircleTimer = SBackBarRightBumper;
+    BackBarRightBumperTimer = SBackBarRightBumper;
     ReadyForInput = TRUE;
 	FirstTimeRun = FALSE;
-	call BarSwap();
+	call (BarSwap);
 }
 
 combo LightAttack{
