@@ -4,7 +4,7 @@
 
 int LightWeaveTime = 70;
 int DefaultCastTime = 100;
-int MainAttackCastTime = 700;
+int MainAttackCastTime = 250;
 int BarSwapTime = 400;
 
 //Booleans
@@ -72,17 +72,17 @@ main {
 		BarSwapTimer = BarSwapTimer - 1;
 		
         if(RunProgram){
-            if(MainBarCircleTimer <= 0 && ReadyForInput) {		
+            /*if(MainBarCircleTimer <= 0 && ReadyForInput) {		
                 ReadyForInput = FALSE;
                 combo_run(MainBarCircle);
-            }
+            }*/
 			
 			if(MainBarTriangleTimer <= 0 && ReadyForInput) {		
                 ReadyForInput = FALSE;
                 combo_run(MainBarTriangle);
             }
 			
-			if(MainBarLeftBumperTimer <= 0 && ReadyForInput) {		
+			/*if(MainBarLeftBumperTimer <= 0 && ReadyForInput) {		
                 ReadyForInput = FALSE;
                 combo_run(MainBarLeftBumper);
             }
@@ -92,7 +92,7 @@ main {
                 combo_run(MainBarRightBumper);
             }
 			
-			/*if (FirstTimeRun && ReadyForInput) {
+			if (FirstTimeRun && ReadyForInput) {
                 ReadyForInput = FALSE;
                 combo_run(RunAllBackBar);
 			}
@@ -137,10 +137,11 @@ main {
 }
 
 combo MainBarSquare {
+	call (Synergy);
     call (LightAttack);
     set_val(PS4_SQUARE, 100);    wait(100);
-    set_val(PS4_SQUARE, 0);      wait(MainAttackCastTime);      
-	call(Ultimate);
+    set_val(PS4_SQUARE, 0);      wait(MainAttackCastTime);  
+	//call(Ultimate);
     ReadyForInput = TRUE;
 }
 
@@ -271,7 +272,12 @@ combo BarSwap{
 
 combo Ultimate {	
     set_val(PS4_R1,100);  set_val(PS4_L1,100);     wait(40); 
-    set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(350);  
+    set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(400);  
+}
+
+combo Synergy {	
+    set_val(PS4_TRIANGLE,100);  set_val(PS4_CIRCLE,100);     wait(40); 
+    set_val(PS4_TRIANGLE, 0);   set_val(PS4_CIRCLE, 0);       wait(40);  
 }
 
 combo Potion {
