@@ -1,0 +1,285 @@
+#pragma METAINFO("template", 1, 0, "Andreas")
+#include "ColorLED.gph"
+#include "ps4.gph"
+
+int LightWeaveTime = 70;
+int DefaultCastTime = 100;
+int MainAttackCastTime = 700;
+int BarSwapTime = 400;
+
+//Booleans
+bool ReadyForInput = TRUE;
+bool RunProgram = FALSE;
+bool FirstTimeRun = TRUE;
+
+//Variables
+int MSElapsed = 0;
+
+// Seconds for each spell
+int SMainBarCircle = 33;
+int SBackBarCircle = 10;
+int SMainBarTriangle = 12;
+int SBackBarTriangle = 23;
+int SMainBarSquare = 10;
+int SBackBarSquare = 12;
+int SMainBarLeftBumper = 10;
+int SBackBarLeftBumper = 10;
+int SMainBarRightBumper = 10;
+int SBackBarRightBumper = 10;
+int SPotion = 35;
+int SBarSwap = 2;
+
+//Timers
+int MainBarCircleTimer = 0;
+int BackBarCircleTimer = 0;
+int MainBarTriangleTimer = 0;
+int BackBarTriangleTimer = 0;
+int MainBarSquareTimer = 0;
+int BackBarSquareTimer = 0;
+int MainBarLeftBumperTimer = 0;
+int BackBarLeftBumperTimer = 0;
+int MainBarRightBumperTimer = 0;
+int BackBarRightBumperTimer = 0;
+int PotionTimer = 10;
+int BarSwapTimer = 0;
+
+
+main {
+    if (event_active(PS4_RIGHT))
+    {
+        RunProgram = !RunProgram;
+		if (RunProgram) 
+			ColorLED(CP,200,200,2,CP);  
+		else {
+			ColorLED(CR,200,200,2,CR);
+			FirstTimeRun = TRUE;
+		}
+    }
+    
+    //Initiate the real time timer
+    MSElapsed = MSElapsed + elapsed_time();
+    if(MSElapsed >= 1000){
+        MSElapsed = 0;
+        MainBarCircleTimer = MainBarCircleTimer - 1;
+		BackBarCircleTimer = BackBarCircleTimer - 1;
+		MainBarTriangleTimer = MainBarTriangleTimer - 1;
+		BackBarTriangleTimer = BackBarTriangleTimer - 1;
+		MainBarSquareTimer = MainBarSquareTimer - 1;
+		BackBarSquareTimer = BackBarSquareTimer - 1;
+		MainBarLeftBumperTimer = MainBarLeftBumperTimer - 1;
+		BackBarLeftBumperTimer = BackBarLeftBumperTimer - 1;
+		MainBarRightBumperTimer = MainBarRightBumperTimer - 1;
+		BackBarRightBumperTimer = BackBarRightBumperTimer - 1;
+		PotionTimer = PotionTimer - 1;
+		BarSwapTimer = BarSwapTimer - 1;
+		
+        if(RunProgram){
+            if(MainBarCircleTimer <= 0 && ReadyForInput) {	
+				ColorLED(CA,200,200,2,CA);	
+                ReadyForInput = FALSE;
+                combo_run(MainBarCircle);
+            }
+			
+			if(MainBarTriangleTimer <= 0 && ReadyForInput) {				
+				ColorLED(CA,200,200,2,CA);
+                ReadyForInput = FALSE;
+                combo_run(MainBarTriangle);
+            }
+			
+			if(MainBarLeftBumperTimer <= 0 && ReadyForInput) {				
+				ColorLED(CA,200,200,2,CA);
+                ReadyForInput = FALSE;
+                combo_run(MainBarLeftBumper);
+            }
+			
+			/*if(MainBarRightBumperTimer <= 0 && ReadyForInput) {			
+				ColorLED(CA,200,200,2,CA);	
+                ReadyForInput = FALSE;
+                combo_run(MainBarRightBumper);
+            }*/
+			
+			if (FirstTimeRun && ReadyForInput) {
+                ReadyForInput = FALSE;
+                combo_run(RunAllBackBar);
+			}
+			
+			if(BackBarSquareTimer <= 0 && ReadyForInput && BarSwapTimer <= 0 && FirstTimeRun == FALSE) {
+				ColorLED(CP,200,200,2,CP);  		
+                ReadyForInput = FALSE;
+                combo_run(BackBarSquare);
+            }
+			
+			/*if(BackBarCircleTimer <= 0 && ReadyForInput && BarSwapTimer <= 0&& FirstTimeRun == FALSE) {	
+				ColorLED(CP,200,200,2,CP);  			
+                ReadyForInput = FALSE;
+                combo_run(BackBarCircle);
+            }*/
+			
+			if(BackBarTriangleTimer <= 0 && ReadyForInput && BarSwapTimer <= 0&& FirstTimeRun == FALSE) {	
+				ColorLED(CP,200,200,2,CP);  			
+                ReadyForInput = FALSE;
+                combo_run(BackBarTriangle);
+            }
+			
+			/*if(BackBarLeftBumperTimer <= 0 && ReadyForInput && BarSwapTimer <= 0&& FirstTimeRun == FALSE) {	
+				ColorLED(CP,200,200,2,CP);  			
+                ReadyForInput = FALSE;
+                combo_run(BackBarLeftBumper);
+            }
+			
+			if(BackBarRightBumperTimer <= 0 && ReadyForInput && BarSwapTimer <= 0&& FirstTimeRun == FALSE) {	
+				ColorLED(CP,200,200,2,CP);  			
+                ReadyForInput = FALSE;
+                combo_run(BackBarRightBumper);
+            }*/
+            
+            if(PotionTimer >= SPotion && ReadyForInput)
+            {
+                combo_run(Potion);
+            }
+            
+            if(ReadyForInput)
+            {
+                ReadyForInput = FALSE;
+                combo_run(MainBarSquare);
+            }
+        }
+    }
+}
+
+combo MainBarSquare {
+    call (LightAttack);
+    set_val(PS4_SQUARE, 100);    wait(100);
+    set_val(PS4_SQUARE, 0);      wait(MainAttackCastTime);      
+	call(Ultimate);
+    ReadyForInput = TRUE;
+}
+
+combo MainBarCircle {
+    call (LightAttack);
+    set_val(PS4_CIRCLE, 100);    wait(100);
+    set_val(PS4_CIRCLE, 0);      wait(DefaultCastTime);
+    MainBarCircleTimer = SMainBarCircle;
+    ReadyForInput = TRUE;
+}
+
+combo MainBarTriangle {
+	call (LightAttack);
+    set_val(PS4_TRIANGLE, 100);    wait(100);
+    set_val(PS4_TRIANGLE, 0);      wait(DefaultCastTime);
+    MainBarTriangleTimer = SMainBarTriangle;
+    ReadyForInput = TRUE;
+}
+
+combo MainBarLeftBumper {
+	call (LightAttack);
+    set_val(PS4_L1, 100);    wait(100);
+    set_val(PS4_L1, 0);      wait(DefaultCastTime);
+    MainBarLeftBumperTimer = SMainBarLeftBumper;
+    ReadyForInput = TRUE;
+}
+
+combo MainBarRightBumper {
+	call (LightAttack);
+    set_val(PS4_R1, 100);    wait(100);
+    set_val(PS4_R1, 0);      wait(DefaultCastTime);
+    MainBarRightBumperTimer = SMainBarRightBumper;
+    ReadyForInput = TRUE;
+}
+
+combo BackBarSquare {
+	call (BarSwap);
+    call (LightAttack);
+    set_val(PS4_SQUARE, 100);    wait(100);
+    set_val(PS4_SQUARE, 0);      wait(400);   
+	call (LightAttack);
+    set_val(PS4_CIRCLE, 100);    wait(100);
+    set_val(PS4_CIRCLE, 0);      wait(300);
+	BackBarSquareTimer = SBackBarSquare;	
+    ReadyForInput = TRUE;
+	call (BarSwap);
+}
+
+combo BackBarCircle {
+	call (BarSwap);
+    call (LightAttack);
+    set_val(PS4_CIRCLE, 100);    wait(100);
+    set_val(PS4_CIRCLE, 0);      wait(DefaultCastTime);
+    BackBarCircleTimer = SBackBarCircle;
+    ReadyForInput = TRUE;
+	call (BarSwap);
+}
+
+combo BackBarTriangle {
+	call (BarSwap);
+	call (LightAttack);
+    set_val(PS4_TRIANGLE, 100);    wait(100);
+    set_val(PS4_TRIANGLE, 0);      wait(DefaultCastTime);
+    BackBarTriangleTimer = SBackBarTriangle;
+    ReadyForInput = TRUE;
+	call (BarSwap);
+}
+
+combo BackBarLeftBumper {
+	call (BarSwap);
+	call (LightAttack);
+    set_val(PS4_L1, 100);    wait(100);
+    set_val(PS4_L1, 0);      wait(DefaultCastTime);
+    BackBarLeftBumperTimer = SBackBarLeftBumper;
+    ReadyForInput = TRUE;
+	call (BarSwap);
+}
+
+combo BackBarRightBumper {
+	call (BarSwap);
+	call (LightAttack);
+    set_val(PS4_R1, 100);    wait(100);
+    set_val(PS4_R1, 0);      wait(DefaultCastTime);
+    BackBarRightBumperTimer = SBackBarRightBumper;
+    ReadyForInput = TRUE;
+	call (BarSwap);
+}
+
+combo RunAllBackBar {
+	call (BarSwap);
+	//Beast Trap
+	call (LightAttack);
+    set_val(PS4_SQUARE, 100);    wait(100);
+    set_val(PS4_SQUARE, 0);      wait(150);       
+	call(Ultimate);
+    //Elemental Blockaid
+    call (LightAttack);
+    set_val(PS4_CIRCLE, 100);    wait(100);
+    set_val(PS4_CIRCLE, 0);      wait(500);
+    BeastTrapTimer = 0;
+    //Boundless Storm
+    call (LightAttack);
+    set_val(PS4_TRIANGLE, 100);    wait(100);
+    set_val(PS4_TRIANGLE, 0);      wait(500);
+    BoundlessStormTimer = 0;
+    ReadyForInput = TRUE;
+	FirstTimeRun = FALSE;
+	call (BarSwap);
+}
+
+combo LightAttack{
+	set_val(PS4_R2, 100);    wait(100);
+    set_val(PS4_R2, 0);      wait(LightWeaveTime);
+}
+
+combo BarSwap{
+    set_val (PS4_LEFT, 100); wait(100);
+    set_val (PS4_LEFT, 0); wait(BarSwapTime);
+	BarSwapTimer = SBarSwap;
+}
+
+combo Ultimate {	
+    set_val(PS4_R1,100);  set_val(PS4_L1,100);     wait(40); 
+    set_val(PS4_R1, 0);   set_val(PS4_L1, 0);       wait(350);  
+}
+
+combo Potion {
+    set_val(PS4_UP, 100);    wait(100);
+    set_val(PS4_UP, 0);      wait(20);
+	PotionTimer = SPotion;
+}
